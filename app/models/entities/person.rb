@@ -44,8 +44,6 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
 
 
     map from('email/address'), to('email')
-    map from('notes[0]/description'), to('note')
-
   end
 
 end

@@ -33,11 +33,6 @@ describe Entities::Person do
             email: {
                 address: 'robert.patinson@touilaight.com'
             },
-            notes: [
-                {
-                    description: 'very important'
-                }
-            ],
             opts: {
                 create_default_organization: true
             }
@@ -49,15 +44,14 @@ describe Entities::Person do
             first_name: 'Robert',
             last_name: 'Patinson',
             addresses: [{
-                address1: 'line1',
-                address2: 'line2',
-                city: 'city',
-                province: 'region',
-                zip: 'postal_code',
-                country: 'country'
-            }],
-            email: 'robert.patinson@touilaight.com',
-            note: 'very important'
+                            address1: 'line1',
+                            address2: 'line2',
+                            city: 'city',
+                            province: 'region',
+                            zip: 'postal_code',
+                            country: 'country'
+                        }],
+            email: 'robert.patinson@touilaight.com'
         }
       }
 

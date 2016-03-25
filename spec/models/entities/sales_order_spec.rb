@@ -7,7 +7,7 @@ describe Entities::SalesOrder do
     it { expect(subject.connec_entity_name).to eql('sales_order') }
     it { expect(subject.external_entity_name).to eql('Order') }
     it { expect(subject.mapper_class).to eql(Entities::SalesOrder::SalesOrderMapper) }
-
+9
     it { expect(subject.object_name_from_connec_entity_hash({'title' => 'the title'})).to eql('the title') }
     it { expect(subject.object_name_from_external_entity_hash({'name' => 'the name'})).to eql('the name') }
   end
