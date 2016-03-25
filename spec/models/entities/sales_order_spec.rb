@@ -7,7 +7,7 @@ describe Entities::SalesOrder do
     it { expect(subject.connec_entity_name).to eql('sales_order') }
     it { expect(subject.external_entity_name).to eql('Order') }
     it { expect(subject.mapper_class).to eql(Entities::SalesOrder::SalesOrderMapper) }
-
+9
     it { expect(subject.object_name_from_connec_entity_hash({'title' => 'the title'})).to eql('the title') }
     it { expect(subject.object_name_from_external_entity_hash({'name' => 'the name'})).to eql('the name') }
   end
@@ -46,6 +46,7 @@ describe Entities::SalesOrder do
             transaction_date: Date.new(1985, 9, 17).iso8601,
             lines: [
                 {
+                    id: 'line_id',
                     unit_price: {
                         net_amount: 55
                     },
@@ -81,6 +82,7 @@ describe Entities::SalesOrder do
             closed_at: Date.new(1985, 9, 17).iso8601,
             line_items: [
                 {
+                    id: 'line_id',
                     price: 55,
                     quantity: '48',
                     title: 'description',
