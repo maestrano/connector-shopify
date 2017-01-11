@@ -40,5 +40,19 @@ describe Entities::Financial do
         it { expect(subject.external_model_to_connec_model({'Order' => orders})).to eql(expected) }
       end
     end
+
+    describe 'connec_model_to_external_model' do
+
+      context 'allows to update existing orders' do
+
+        let(:expected) {
+          {
+              'Invoice' => {'Order' => ['A connec invoice']}
+          }
+        }
+
+        it { expect(subject.connec_model_to_external_model({'Invoice' => ['A connec invoice']})).to eql(expected) }
+      end
+    end
   end
 end

@@ -16,7 +16,19 @@ class Entities::SubEntities::Invoice < Maestrano::Connector::Rails::SubEntityBas
     entity['transaction_number']
   end
 
+  def self.mapper_classes
+    {'Order' => Entities::SubEntities::InvoiceMapper}
+  end
+
   def self.references
     {'Order' => Entities::SubEntities::InvoiceMapper.invoice_references}
+  end
+
+  def can_write_external?
+    false
+  end
+
+  def can_update_external?
+    true
   end
 end

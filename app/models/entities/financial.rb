@@ -27,7 +27,9 @@ class Entities::Financial < Maestrano::Connector::Rails::ComplexEntity
 
 # All the entitites are read only, no need to send them
   def connec_model_to_external_model(connec_hash_of_entities)
-    {}
+    invoices = connec_hash_of_entities['Invoice']
+
+    {'Invoice' => { 'Order' => invoices}}
   end
 
 #   # input :  {

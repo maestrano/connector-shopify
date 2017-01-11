@@ -55,4 +55,18 @@ class Entities::SubEntities::InvoiceMapper
     output
   end
 
+  before_normalize do |input, output|
+    input.slice!('title', 'public_note', 'shipping_address', 'billing_address', 'transaction_number', 'person_id', 'lines')
+
+    input
+  end
+
+  after_normalize do |input, output|
+    output[:shipping_address][:last_name] ||= 'Not provided'
+    # TODO Shopify does not accept orders without a country in the shipping_address field
+    output[:shipping_address][:country_code] ||= 'UK'
+    output[:shipping_address][:country] ||= 'United Kingdom'
+
+    output
+  end
 end
