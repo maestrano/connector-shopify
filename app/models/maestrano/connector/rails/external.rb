@@ -5,7 +5,7 @@ class Maestrano::Connector::Rails::External
   # If you add new entities, you need to generate
   # a migration to add them to existing organizations
   def self.entities_list
-    %w(company item person financial)
+    %w(company item organization person financial)
   end
 
   def self.create_account_link(organization = nil)
