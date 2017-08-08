@@ -8,4 +8,6 @@ ActiveAdmin.register Maestrano::Connector::Rails::IdMap do
                 :updated_at, :to_connec, :to_external, :name, :message, :external_inactive,
                 :metadata
 
+  preserve_default_filters!
+  filter :connec_entity, as: :select, collection: proc { Maestrano::Connector::Rails::IdMap.all.pluck(:connec_entity)&.uniq }
 end

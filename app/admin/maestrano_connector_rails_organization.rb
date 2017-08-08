@@ -3,6 +3,21 @@ ActiveAdmin.register Maestrano::Connector::Rails::Organization do
 
   menu label: "Organizations", priority: 1
 
+  action_item :synchronize, method: :post, only: :show do
+    link_to "Start a Synchronization", synchronize_admin_maestrano_connector_rails_organization_path
+  end
+
+  member_action :synchronize, method: :get do
+    org = Maestrano::Connector::Rails::Organization.find_by(id: params[:id])
+    if org.sync_enabled
+      flash[:notice] = "Synchronization requested for #{org.uid} - #{org.name}"
+      Maestrano::Connector::Rails::SynchronizationJob.perform_later(org.id, {force: true})
+    else
+      flash[:notice] = "#{org.uid} - #{org.name} is not Synch enabled!"
+    end
+    redirect_to admin_maestrano_connector_rails_organizations_path
+  end
+
   index do
     selectable_column
     id_column
