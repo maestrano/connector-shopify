@@ -1,21 +1,22 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2'
+gem 'rails', '~> 4.2.7.1'
 
-gem 'turbolinks', '~> 2.5'
 gem 'jquery-rails'
 gem 'figaro'
 gem 'httparty'
 gem 'uglifier', '>= 1.3.0'
 gem 'bootstrap-validator-rails'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'countries'
 
 gem 'puma', require: false
 gem 'sinatra', require: false
 
-gem 'maestrano-connector-rails', '2.0.2.pre.RC9'
+gem 'maestrano-connector-rails', '~> 2.1.0'
 
 gem 'redis-rails'
+gem 'activeadmin'
 
 gem 'omniauth-shopify-oauth2', '~> 1.1'
 gem 'shopify_api'

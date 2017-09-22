@@ -29,7 +29,7 @@ describe Entities::Person do
                     city: 'city',
                     region: 'region',
                     postal_code: 'postal_code',
-                    country: 'Country Code'
+                    country: 'AU'
                 }
             },
             phone_work: {
@@ -49,11 +49,7 @@ describe Entities::Person do
                 ],
               description: "very important",
               tag: "shopify"}
-            ],
-            opts: {
-                attach_to_organization: "Robert Patinson"
-            }
-
+            ]
         }
       }
       let(:external_hash) {
@@ -67,7 +63,7 @@ describe Entities::Person do
               city: "city",
               province: "region",
               zip: "postal_code",
-              country_code: "Country Code",
+              country_code: "AU",
               phone: "0208 111 222 33"
             },
             addresses: [
@@ -77,7 +73,7 @@ describe Entities::Person do
                 city: 'city',
                 province: 'region',
                 zip: 'postal_code',
-                country_code: 'Country Code',
+                country_code: 'AU',
                 phone: '0208 111 222 33'
               }
             ],
@@ -97,7 +93,5 @@ describe Entities::Person do
         it { expect(subject.map_to_connec(external_hash.with_indifferent_access)).to eql(connec_hash.merge({id:[{id:'id', provider: organization.oauth_provider, realm: organization.oauth_uid}], opts: {attach_to_organization: "Pty Ltd"}}).with_indifferent_access) }
       end
     end
-
-
   end
 end

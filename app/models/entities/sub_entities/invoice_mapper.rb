@@ -40,15 +40,32 @@ class Entities::SubEntities::InvoiceMapper
   map from('/lines'), to('/line_items'), using: Entities::SubEntities::LineMapper
   map from('/lines_shipping'), to('/shipping_lines'), using: Entities::SubEntities::LineMapper
 
-  before_denormalize do |input, output|
+  before_denormalize do |input, output, opts|
+    shipping_country_code = input.dig('shipping_address', 'country_code')
+
+    shipping_tax_country = opts[:opts][:shipping_tax_rates]&.find do |country|
+      country['code'] == shipping_country_code
+    end
+
+    # Shopify allow a general setting for 'Rest of the World'
+    # That can be used for international shipping taxes
+    shipping_tax_country ||= opts[:opts][:shipping_tax_rates]&.find do |country|
+      country['code'] == '*'
+    end
+
     input['line_items']&.each do |line|
+      line['taxes_included'] = input['taxes_included']
+    end
+
+    input['shipping_lines']&.each do |line|
+      line['country_tax_rate'] = shipping_tax_country&.dig('tax')
       line['taxes_included'] = input['taxes_included']
     end
 
     input
   end
 
-  after_denormalize do |input, output|
+  after_denormalize do |input, output, opts|
     output[:opts] = {sparse: false}
 
     output[:status] = STATUS_MAPPING_INV[input['financial_status']] if input['financial_status']
@@ -59,7 +76,7 @@ class Entities::SubEntities::InvoiceMapper
       output[:discount_amount] = input['discount_codes'].map { |l| l['amount'].to_f }.sum
     end
 
-    output[:apply_tax_after_discount] = false
+    output[:apply_tax_after_discount] = !input['taxes_included']
 
     output = set_lines_currency(output, input['currency'])
 

@@ -44,12 +44,21 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
       # If the customer's company field is not blank we'll use that to name the company
       if input['default_address'] && !input['default_address']['company'].blank?
         output[:opts] = {attach_to_organization: input['default_address']['company']}
-      else
-        # Otherwise we create a company with the Customer First + Last name
-        organization_name = "#{input['first_name']} #{input['last_name']}"
-        output[:opts] = {attach_to_organization: organization_name.strip }
       end
 
+      input
+    end
+
+    def self.country_to_alpha2(input, field)
+      country = input.dig('address_work', field, 'country')
+      alpha2 = ISO3166::Country.find_country_by_name(country)&.alpha2 if country && country.length > 2
+
+      input['address_work'][field]['country'] = alpha2 if alpha2
+    end
+
+    before_normalize do |input, output|
+      country_to_alpha2(input, 'billing')
+      country_to_alpha2(input, 'shipping')
       input
     end
 

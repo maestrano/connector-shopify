@@ -13,7 +13,21 @@ describe Entities::SubEntities::Order do
     let(:organization) { create(:organization) }
     let(:connec_client) { Maestrano::Connec::Client[organization.tenant].new(organization.uid) }
     let(:external_client) { Maestrano::Connector::Rails::External.get_client(organization) }
-    let(:opts) { }
+    let(:opts) { {shipping_tax_rates: [
+          {
+            "name"=>"United Kingdom",
+            "tax"=>0.2,
+            # This would be a country code with real data
+            "code"=>"shipping_address.country",
+          },
+          {
+            "name"=>"Rest of World",
+            "tax"=>0.0,
+            "code"=>"*"
+          }
+        ]
+      }
+    }
     subject { Entities::SubEntities::Order.new(organization, connec_client, external_client, opts) }
 
     describe 'map_to_connec' do
@@ -128,7 +142,7 @@ describe Entities::SubEntities::Order do
                 id: [{id: '369256396', provider: organization.oauth_provider, realm: organization.oauth_uid}],
                 unit_price: {
                     total_amount: 10.0,
-                    tax_rate: 0.0,
+                    tax_rate: 20.0,
                     currency: 'EUR'
                 },
                 description: 'Shipping: Standard',
@@ -139,7 +153,7 @@ describe Entities::SubEntities::Order do
         }
 
         context 'with taxes excluded' do
-          it { expect(subject.map_to('Invoice', order.with_indifferent_access)).to eql(connec_hash.with_indifferent_access) }
+          it { expect(subject.map_to('Invoice', order.with_indifferent_access)).to eql(connec_hash.merge(apply_tax_after_discount: true).with_indifferent_access) }
         end
 
         context 'with taxes included' do
@@ -147,6 +161,8 @@ describe Entities::SubEntities::Order do
             order[:taxes_included] = true
             connec_hash[:lines][0][:unit_price][:total_amount] = 55.0
             connec_hash[:lines][0][:unit_price].delete(:net_amount)
+            connec_hash[:lines][1][:unit_price][:total_amount] = 10.0
+            connec_hash[:lines][1][:unit_price].delete(:net_amount)
           end
 
           it { expect(subject.map_to('Invoice', order.with_indifferent_access)).to eql(connec_hash.with_indifferent_access) }
@@ -157,7 +173,7 @@ describe Entities::SubEntities::Order do
             order[:financial_status] = 'paid'
           end
 
-          it { expect(subject.map_to('Invoice', order.with_indifferent_access)).to eql(connec_hash.merge({balance: 0.0, deposit: 82.96, status: 'PAID'}).with_indifferent_access) }
+          it { expect(subject.map_to('Invoice', order.with_indifferent_access)).to eql(connec_hash.merge({balance: 0.0, deposit: 82.96, status: 'PAID', apply_tax_after_discount: true}).with_indifferent_access) }
         end
 
         context 'with shipping and global discount' do
@@ -305,7 +321,7 @@ describe Entities::SubEntities::Order do
                 "latitude"=>-33.8708464,
                 "longitude"=>151.20733,
                 "name"=>"Alice Arthon",
-                "country_code"=>"AU",
+                "country_code"=>"shipping_address.country",
                 "province_code"=>"NSW"
               },
               "fulfillments"=>nil,
@@ -552,7 +568,7 @@ describe Entities::SubEntities::Order do
                 "city"=>"Sydney",
                 "region"=>"New South Wales",
                 "postal_code"=>"2000",
-                "country"=>"AU"
+                "country"=>"shipping_address.country"
               },
               "apply_tax_after_discount" => false,
               "billing_address"=>{
@@ -578,7 +594,7 @@ describe Entities::SubEntities::Order do
                   "id"=>[{"id"=>4051029064, "provider"=>"this_app", "realm"=>organization.oauth_uid}],
                   "unit_price"=>{
                     "total_amount"=>5.0,
-                    "tax_rate"=>0.0,
+                    "tax_rate"=>20.0,
                     "currency"=>"AUD"
                   },
                   "description"=>"Shipping: Deliveroo",
@@ -740,7 +756,7 @@ describe Entities::SubEntities::Order do
               "latitude"=>nil,
               "longitude"=>nil,
               "name"=>"Chris Cordial",
-              "country_code"=>"AU",
+              "country_code"=>"shipping_address.country",
               "province_code"=>"ACT"
             },
             "fulfillments"=>nil,
@@ -922,7 +938,7 @@ describe Entities::SubEntities::Order do
                 "latitude"=>nil,
                 "longitude"=>nil,
                 "name"=>"Chris Cordial",
-                "country_code"=>"AU",
+                "country_code"=>"shipping_address.country",
                 "province_code"=>"ACT"
               },
               "fulfillments"=>nil,
@@ -1087,7 +1103,7 @@ describe Entities::SubEntities::Order do
             "title"=>"#1011",
             "shipping_address"=>{
               "region"=>"Australian Capital Territory",
-              "country"=>"AU"
+              "country"=>"shipping_address.country"
             },
             "apply_tax_after_discount" => false,
             "billing_address"=>{
@@ -1112,7 +1128,7 @@ describe Entities::SubEntities::Order do
                 "id"=>[{"id"=>4051086472, "provider"=>"this_app", "realm"=>organization.oauth_uid}],
                 "unit_price"=>{
                   "total_amount"=>5.0,
-                  "tax_rate"=>0.0,
+                  "tax_rate"=>20.0,
                   "currency"=>"AUD"
                 },
                 "description"=>"Shipping: Delivery",
