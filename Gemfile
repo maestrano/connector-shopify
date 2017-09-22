@@ -13,7 +13,7 @@ gem 'countries'
 gem 'puma', require: false
 gem 'sinatra', require: false
 
-gem 'maestrano-connector-rails', '2.1.0'
+gem 'maestrano-connector-rails', '~> 2.1.0'
 
 gem 'redis-rails'
 gem 'activeadmin'

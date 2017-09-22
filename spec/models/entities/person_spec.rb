@@ -49,11 +49,7 @@ describe Entities::Person do
                 ],
               description: "very important",
               tag: "shopify"}
-            ],
-            opts: {
-                attach_to_organization: "Robert Patinson"
-            }
-
+            ]
         }
       }
       let(:external_hash) {
@@ -97,7 +93,5 @@ describe Entities::Person do
         it { expect(subject.map_to_connec(external_hash.with_indifferent_access)).to eql(connec_hash.merge({id:[{id:'id', provider: organization.oauth_provider, realm: organization.oauth_uid}], opts: {attach_to_organization: "Pty Ltd"}}).with_indifferent_access) }
       end
     end
-
-
   end
 end
