@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe Entities::Person do
+describe Entities::Contact do
   describe 'class methods' do
-    subject { Entities::Person }
+    subject { Entities::Contact }
 
-    it { expect(subject.connec_entity_name).to eql('Person') }
+    it { expect(subject.connec_entity_name).to eql('Contact') }
     it { expect(subject.external_entity_name).to eql('Customer') }
-    it { expect(subject.mapper_class).to eql(Entities::Person::PersonMapper) }
+    it { expect(subject.mapper_class).to eql(Entities::Contact::ContactMapper) }
     it { expect(subject.object_name_from_connec_entity_hash({'first_name' => 'Robert', 'last_name' => 'Patinson'})).to eql('Robert Patinson') }
     it { expect(subject.object_name_from_external_entity_hash({'first_name' => 'Robert', 'last_name' => 'Patinson'})).to eql('Robert Patinson') }
   end
 
   describe 'instance methods' do
     let!(:organization) { create(:organization) }
-    subject { Entities::Person.new(organization,Maestrano::Connector::Rails::ConnecHelper.get_client(organization),nil) }
+    subject { Entities::Contact.new(organization,Maestrano::Connector::Rails::ConnecHelper.get_client(organization),nil) }
 
     describe 'connec_model_to_external_model' do
 
@@ -21,7 +21,7 @@ describe Entities::Person do
         {
             first_name: 'Robert',
             last_name: 'Patinson',
-            full_name: 'Robert Patinson',
+            name: 'Robert Patinson',
             address_work: {
                 billing: {
                     line1: 'line1',

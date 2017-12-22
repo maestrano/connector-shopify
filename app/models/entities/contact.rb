@@ -1,4 +1,4 @@
-class Entities::Person < Maestrano::Connector::Rails::Entity
+class Entities::Contact < Maestrano::Connector::Rails::Entity
 
   def initialize(organization, connec_client, external_client, opts = {})
     super
@@ -6,7 +6,7 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
   end
 
   def self.connec_entity_name
-    'Person'
+    'Contact'
   end
 
   def self.external_entity_name
@@ -14,7 +14,7 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
   end
 
   def self.mapper_class
-    PersonMapper
+    ContactMapper
   end
 
   def self.object_name_from_connec_entity_hash(entity)
@@ -32,7 +32,7 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
     }
   end
 
-  class PersonMapper
+  class ContactMapper
     extend HashMapper
     SHOPIFY_NOTE_TAG = 'shopify'
     SHOPIFY_NOTE_ID = 'shopify001'
@@ -110,8 +110,8 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
 
       external_note = {id: SHOPIFY_NOTE_ID, description: input['note'], tag: SHOPIFY_NOTE_TAG} if input['note']
       output[:notes] = [external_note] if external_note
-      output[:full_name] = "#{output[:first_name]} #{output[:last_name]}"
-
+      output[:name] = "#{output[:first_name]} #{output[:last_name]}"
+      output[:is_person] = true
       output
     end
 
