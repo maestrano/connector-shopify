@@ -22,6 +22,7 @@ describe Entities::Contact do
             first_name: 'Robert',
             last_name: 'Patinson',
             name: 'Robert Patinson',
+            is_person: true,
             address_work: {
                 billing: {
                     line1: 'line1',
