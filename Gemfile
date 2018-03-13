@@ -16,7 +16,7 @@ gem 'redis-rails'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 
-gem 'maestrano-connector-rails', '~> 2.3.0'
+gem 'maestrano-connector-rails', '~> 2.3.1'
 
 gem 'omniauth-shopify-oauth2', '~> 1.1'
 gem 'shopify_api'
@@ -37,6 +37,7 @@ group :test, :develpment do
   gem 'sqlite3'
 
   # Style check
+  gem 'bundler-audit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
 end
