@@ -2,33 +2,38 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 
-gem 'turbolinks', '~> 2.5'
 gem 'jquery-rails'
 gem 'figaro'
 gem 'httparty'
 gem 'uglifier', '>= 1.3.0'
 gem 'bootstrap-validator-rails'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'puma', require: false
-gem 'sinatra', require: false
 
-gem 'maestrano-connector-rails', '2.0.2.pre.RC9'
-
+gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'redis-rails'
+
+gem 'maestrano-connector-rails', '~> 2.3.0'
 
 gem 'omniauth-shopify-oauth2', '~> 1.1'
 gem 'shopify_api'
 
+gem 'newrelic_rpm'
+
+gem 'activeadmin'
+gem 'jsonapi-resources'
+gem 'pundit'
+gem 'pundit-resources'
+
 group :production, :uat do
-  gem 'activerecord-jdbcmysql-adapter', platforms: :jruby
-  gem 'mysql2', platforms: :ruby
+  gem 'mysql2'
   gem 'rails_12factor'
 end
 
 group :test, :develpment do
-  gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
-  gem 'sqlite3', platforms: :ruby
+  gem 'sqlite3'
+  gem 'rubocop'
 end
 
 group :test do
