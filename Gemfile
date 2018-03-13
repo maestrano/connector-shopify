@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 
-gem 'jquery-rails'
+gem 'bootstrap-validator-rails'
 gem 'figaro'
 gem 'httparty'
+gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
-gem 'bootstrap-validator-rails'
 
 gem 'puma', require: false
 
+gem 'redis-rails'
 gem 'sidekiq'
 gem 'sidekiq-cron'
-gem 'redis-rails'
 
 gem 'maestrano-connector-rails', '~> 2.3.0'
 
@@ -33,14 +35,17 @@ end
 
 group :test, :develpment do
   gem 'sqlite3'
-  gem 'rubocop'
+
+  # Style check
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
-  gem 'simplecov'
-  gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'rspec-rails'
   gem 'shoulda-matchers'
+  gem 'simplecov'
   gem 'timecop'
   gem 'webmock'
 end
