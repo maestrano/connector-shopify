@@ -10,12 +10,12 @@ class Entities::SubEntities::InvoiceMapper
   end
 
   STATUS_MAPPING_INV = {
-      'authorized' => 'AUTHORISED',
-      'pending' => 'DRAFT',
-      'paid' => 'PAID',
-      'partially_paid' => 'AUTHORISED',
-      'voided' => 'VOIDED'
-      }
+    'authorized' => 'AUTHORISED',
+    'pending' => 'DRAFT',
+    'paid' => 'PAID',
+    'partially_paid' => 'AUTHORISED',
+    'voided' => 'VOIDED'
+  }
 
   map from('/person_id'), to('/customer/id')
   map from('/transaction_date'), to('/created_at')
@@ -40,29 +40,43 @@ class Entities::SubEntities::InvoiceMapper
   map from('/lines'), to('/line_items'), using: Entities::SubEntities::LineMapper
   map from('/lines_shipping'), to('/shipping_lines'), using: Entities::SubEntities::LineMapper
 
-  before_denormalize do |input, output|
+  before_denormalize do |input, output, opts|
+    shipping_country_code = input.dig('shipping_address', 'country_code')
+
+    shipping_tax_country = opts[:opts][:shipping_tax_rates]&.find do |country|
+      country['code'] == shipping_country_code
+    end
+
+    # Shopify allow a general setting for 'Rest of the World'
+    # That can be used for international shipping taxes
+    shipping_tax_country ||= opts[:opts][:shipping_tax_rates]&.find do |country|
+      country['code'] == '*'
+    end
+
     input['line_items']&.each do |line|
+      line['taxes_included'] = input['taxes_included']
+    end
+
+    input['shipping_lines']&.each do |line|
+      line['country_tax_rate'] = shipping_tax_country&.dig('tax')
       line['taxes_included'] = input['taxes_included']
     end
 
     input
   end
 
-  after_denormalize do |input, output|
+  after_denormalize do |input, output, opts|
+    output[:opts] = {sparse: false}
+
     output[:status] = STATUS_MAPPING_INV[input['financial_status']] if input['financial_status']
     output[:type] = input['kind'] != 'refund' ? 'CUSTOMER' : 'SUPPLIER'
     output[:lines].concat(output.delete(:lines_shipping)) if output[:lines_shipping]
 
-    output[:lines] << {
-      id: 'shopify-discount',
-      quantity: 1,
-      description: 'Discount',
-      unit_price: {
-        net_amount: - input['total_discounts'].to_f,
-        tax_amount: 0.0,
-        currency: input['currency']
-      }
-    } if input['total_discounts'].to_f > 0
+    if input['discount_codes']
+      output[:discount_amount] = input['discount_codes'].map { |l| l['amount'].to_f }.sum
+    end
+
+    output[:apply_tax_after_discount] = !input['taxes_included']
 
     output = set_lines_currency(output, input['currency'])
 

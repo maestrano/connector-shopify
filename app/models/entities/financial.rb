@@ -11,6 +11,11 @@ class Entities::Financial < Maestrano::Connector::Rails::ComplexEntity
     'Orders'
   end
 
+  def before_sync(last_synchronization_date)
+    countries = @external_client.find 'Country'
+    @opts[:shipping_tax_rates] = countries
+  end
+
 #   # input :  {
 #   #             connec_entity_names[0]: [unmapped_connec_entitiy1, unmapped_connec_entitiy2],
 #   #             connec_entity_names[1]: [unmapped_connec_entitiy3, unmapped_connec_entitiy4]
