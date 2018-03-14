@@ -18,7 +18,7 @@ module ConnectorShopify
     config.cache_store = :redis_store, "#{ENV['REDIS_URL']}/cache" if ENV['REDIS_URL'].present?
 
     # Use Redis for session store
-    config.session_store :redis_store, servers: ["#{ENV['REDIS_URL']}/session"]
+    config.session_store :redis_store, servers: ["#{ENV['REDIS_URL']}/session"] if ENV['REDIS_URL'].present?
 
     # Use Sidekiq for background jobs
     config.active_job.queue_adapter = :sidekiq
