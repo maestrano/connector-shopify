@@ -8,12 +8,20 @@ Bundler.require(*Rails.groups)
 
 module ConnectorShopify
   class Application < Rails::Application
-      config.generators do |g|
-    g.test_framework :rspec, fixture: false
-    g.view_specs false
-    g.helper_specs false
-  end
+    config.generators do |g|
+      g.test_framework :rspec, fixture: false
+      g.view_specs false
+      g.helper_specs false
+    end
 
+    # Use Redis as cache store
+    config.cache_store = :redis_store, "#{ENV['REDIS_URL']}/cache" if ENV['REDIS_URL'].present?
+
+    # Use Redis for session store
+    config.session_store :redis_store, servers: ["#{ENV['REDIS_URL']}/session"] if ENV['REDIS_URL'].present?
+
+    # Use Sidekiq for background jobs
+    config.active_job.queue_adapter = :sidekiq
 
     config.action_dispatch.default_headers['P3P'] = 'CP="Not used"'
     config.action_dispatch.default_headers.delete('X-Frame-Options')

@@ -1,12 +1,12 @@
 ActiveAdmin.setup do |config|
-  config.site_title = "Organizations Management"
+  config.site_title = 'Organizations Management'
 
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
-      menu.add label: "Connector Home", url: "/", priority: 0
+      menu.add label: 'Connector Home', url: '/', priority: 0
 
-      menu.add label: "GitHub" do |sites|
-        sites.add label: "Github",
+      menu.add label: 'GitHub' do |sites|
+        sites.add label: 'Github',
                   url: "http://github.com/#{ENV['GIT_REPO']}"
       end
     end
