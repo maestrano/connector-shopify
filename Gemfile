@@ -29,7 +29,7 @@ gem 'pundit'
 gem 'pundit-resources'
 
 group :production, :uat do
-  gem 'mysql2'
+  gem 'mysql2', '< 0.5'
   gem 'rails_12factor'
 end
 
