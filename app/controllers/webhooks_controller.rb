@@ -59,8 +59,8 @@ class WebhooksController < ApplicationController
       secret = ENV['shopify_api_key']
       digest = OpenSSL::Digest.new('sha256')
       ActiveSupport::SecurityUtils.variable_size_secure_compare(
-          shopify_hmac,
-          Base64.encode64(OpenSSL::HMAC.digest(digest, secret, data)).strip
+        shopify_hmac,
+        Base64.encode64(OpenSSL::HMAC.digest(digest, secret, data)).strip
       )
     end
 
