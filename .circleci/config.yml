@@ -42,7 +42,13 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       # Code Audit
-      - run: bundle exec rake bundle:audit
+      # Not affected by this vulnerability as we're not using OmniAuth
+      # to add alternate identites to user accounts
+      - run:
+          command: |
+            bundle exec bundler-audit update
+            bundle exec bundler-audit check --ignore CVE-2015-9284
+
       - run: bundle exec rake rubocop
 
       # Database setup
