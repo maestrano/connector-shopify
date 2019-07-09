@@ -1,7 +1,7 @@
 Develop
-[ ![Codeship Status for maestrano/connector-shopify](https://codeship.com/projects/e35577f0-c6dd-0133-72ca-1ac1b065c1d6/status?branch=develop)](https://codeship.com/projects/138863)
+[![CircleCI](https://circleci.com/gh/maestrano/connector-shopify/tree/develop.svg?style=svg)](https://circleci.com/gh/maestrano/connector-shopify/tree/develop)
 Master
-[ ![Codeship Status for maestrano/connector-shopify](https://codeship.com/projects/e35577f0-c6dd-0133-72ca-1ac1b065c1d6/status?branch=master)](https://codeship.com/projects/138863)
+[![CircleCI](https://circleci.com/gh/maestrano/connector-shopify/tree/master.svg?style=svg)](https://circleci.com/gh/maestrano/connector-shopify/tree/master)
 
 # Shopify Connector
 
