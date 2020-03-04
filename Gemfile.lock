@@ -277,7 +277,7 @@ GEM
       activerecord (>= 3.0)
     powerpack (0.1.1)
     public_suffix (3.0.2)
-    puma (3.11.4)
+    puma (3.12.4)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     pundit-resources (1.1.1)
