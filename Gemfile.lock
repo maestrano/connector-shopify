@@ -158,7 +158,7 @@ GEM
     hash_mapper (0.2.3)
       activesupport (>= 4)
     hashdiff (0.3.7)
-    hashie (3.5.7)
+    hashie (5.0.0)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -261,8 +261,8 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    omniauth (1.8.1)
-      hashie (>= 3.4.6, < 3.6.0)
+    omniauth (1.9.2)
+      hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
     omniauth-oauth2 (1.5.0)
       oauth2 (~> 1.1)
@@ -286,7 +286,7 @@ GEM
       pundit
       rails (>= 4.2.1, < 5.1)
     raabro (1.1.5)
-    rack (1.6.10)
+    rack (1.6.13)
     rack-protection (2.0.1)
       rack
     rack-test (0.6.3)
